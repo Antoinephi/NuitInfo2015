@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Maxime CLEMENT" />
+<meta name="author" content="William Leemans" />
+<meta name="author" content="Jordan Piorun" />
+<title>Test ton TP Spark !</title>
+
+<!-- jquery -->
+<script src="lib/jquery/jquery-2.1.4.min.js"></script>
+
+
+<!-- syntaxhighlighter -->
+<script type="text/javascript"
+	src="lib/syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript"
+	src="lib/syntaxhighlighter_3.0.83/scripts/shBrushJScript.js"></script>
+<link type="text/css" rel="stylesheet"
+	href="lib/syntaxhighlighter_3.0.83/styles/shCore.css" />
+<link type="text/css" rel="stylesheet"
+	href="lib/syntaxhighlighter_3.0.83/styles/shThemeDefault.css" />
+
+
+<!-- bootstrap -->
+<link rel="stylesheet"
+	href="lib/bootstrap-3.3.5-dist/css/bootstrap.min.css" />
+<link rel="stylesheet"
+	href="/lib/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css" />
+<script src="lib/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+
+<!-- toastr -->
+<link rel="stylesheet" href="lib/toastr/toastr.min.css"/>
+<script src="lib/toastr/toastr.min.js"></script>
+
+<script type="text/javascript">
+	SyntaxHighlighter.defaults['gutter'] = false;
+	SyntaxHighlighter.all();
+</script>
+
+<style type="text/css">
+.syntaxhighlighter table td.code .container {
+	position: relative !important;
+	padding-bottom: 5px !important;
+}
+
+.syntaxhighlighter .toolbar {
+	display: none;
+}
+
+#spark_logo {
+	width: 100%
+}
+
+.title-container {
+	background-color: #313131;
+}
+
+.title-container h1, h2, h3, h4, p {
+	color: white;
+}
+
+.title-container a {
+	color: #E69748;
+}
+
+.ressource-container {
+	background-color: #313131;
+}
+
+.ressource-container a {
+	color: #E69748;
+}
+
+.btn-ajax {
+	width: 100%
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	background-color: #313131;
+}
+
+#container {
+	min-height: 100%;
+	position: relative;
+}
+
+#code {
+	background-color: white;
+	border-radius: 50px;
+}
+
+#header {
+	padding: 10px;
+}
+
+#body {
+	padding: 10px;
+	padding-bottom: 60px; /* Height of the footer */
+}
+
+#footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 60px; /* Height of the footer */
+}
+
+#footer .container {
+	height: 100%
+}
+
+.container-fluid {
+	height: 100% margin-top: 25px;
+	margin-bottom: 25px;
+}
+</style>
+
+
+</head>
+
+<body>
+
+
+
+	<div id="container">
+		<div id="header">
+			<div class="container">
+				<div class="jumbotron title-container">
+					<div class="col-md-2">
+						<img src="img/logo_just_spark.svg" id="spark_logo" />
+					</div>
+					<h1>Tutoriel Spark</h1>
+					<p>
+						Ce site est conçu pour te faire apprendre <i><a href="http://sparkjava.com/">Spark</a></i>
+						de manière incrémentale et ludique.
+					</p>
+					<br></br> <br></br> <br></br>
+					<p>A chaque étape, tu pourras visualiser une requêtte ainsi que
+						le comportement attendu, à toi de jouer !</p>
+				</div>
+			</div>
+		</div>
+		<div id="body">
+			<div id="code" class="container">
+				<div class="container-fluid code-container col-md-4 col-md-offset-4">
+					<pre class="brush: js; ruler: false	">
+						/*
+						 * Etape {{etape}} sur {{etapeMax}}
+						 *
+						 * Comportement attendu : 
+						 *	{{#each comportements}}		-> {{ this }}
+						 *  {{/each}}
+						 */
+						$.ajax({
+						  {{#each ajax}}{{key}}: {{ this }},
+						  {{/each}}
+						})
+					</pre>
+					<button class="btn btn-lg btn-info btn-ajax">Envoyer !</button>
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+				<div class="container">
+            				<div class="col-md-2 col-md-offset-3 ressource-container">
+            					<i><a href="http://sparkjava.com/documentation.html">Documentation</a></i>
+            				</div>
+            				<div class="col-md-2 ressource-container">
+            					<i><a href="https://sparktutorials.github.io/">Tutos pour aller plus loin</a></i>
+            				</div>
+            				<div class="col-md-2 ressource-container">
+            					<i><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Solutions</a></i>
+            				</div>
+            			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$('.btn-ajax').on('click', function(){
+			ajaxCall();
+		});
+		
+		function ajaxCall(){
+			$.ajax({
+				{{#each ajax}}{{key}}: {{{ this }}},
+				{{/each}}
+				success : successFonction,
+				error : errorFonction		  
+			});
+		};
+		
+		function successFonction(resp){
+			$('body').html(resp);
+			toastr.success('Bravo !')
+			SyntaxHighlighter.highlight()
+		};
+		function errorFonction(resp){
+			toastr.error('Dommage ! Essayes encore !')
+		};
+	</script>
+
+
+
+
+</body>
+</html>
