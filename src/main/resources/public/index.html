@@ -1,203 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <!-- Use correct character set. -->
-  <meta charset="utf-8">
-  <!-- Tell IE to use the latest, best version. -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-  <title>Hello World!</title>
-  <script src="./Build/Cesium/Cesium.js"></script>
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <style>
-  @import url(./Build/Cesium/Widgets/widgets.css);
-  html, body, #cesiumContainer {
-    width: 100%; height: 100%; margin: 0; padding: 0;
-  }
-  #searchBar {
-    background: rgba(42, 42, 42, 0.8);
-    padding: 4px;
-    border-radius: 4px;
-  }
-  #searchBar input {
-    vertical-align: middle;
-    padding-top: 2px;
-    padding-bottom: 2px;
-  }
-  </style>
-</head>
-<body>
-  <div id="searchBar">
-    <table><tr>
-      <td>Search</td>
-      <td>
-        <input id="searchBarInput" type="text" size="10">
-      </td>
-    </tr></table>
-  </div>
-  <div id="cesiumContainer" class="fullSize"></div>
-  <script>
-  var viewer = new Cesium.Viewer('cesiumContainer');
 
-  var helps = [];
- 
-  $.get("http://172.18.13.123:8080/location", function(data){
-	  console.log($.parseJSON(data));
-	  json_data = $.parseJSON(data);
-	  
-	  $.each(json_data, function(index){
-		  console.log(json_data[index].client_id);
-		  console.log(json_data[index].latitude);
-		  console.log(json_data[index].longitude);
+  <head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8">
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>Gestion de crises</title>
+    <script src="./Build/Cesium/Cesium.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="./gestionDeCrises.css">
+    <style>
+    @import url(./Build/Cesium/Widgets/widgets.css);
+    </style>
+  </head>
 
-		 helps.push(viewer.entities.add({
-			 name : json_data[index].client_id,
-			 position : Cesium.Cartesian3.fromDegrees(parseFloat(json_data[index].longitude), parseFloat(json_data[index].latitude)),
-			 description : 'Help !',
-			    point : {
-			      pixelSize : 5,
-			      color : Cesium.Color.RED,
-			      outlineColor : Cesium.Color.WHITE,
-			      outlineWidth : 2
-			    },
-			    label : {
-			      text : json_data[index].client_id + '',
-			      font : '14pt monospace',
-			      style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-			      outlineWidth : 2,
-			      verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
-			      pixelOffset : new Cesium.Cartesian2(0, -9),
-			      show: false
-			    }
-		 })); 
-	  });
-	  
-  });
-  
-  /*helps.push(viewer.entities.add({
-    name : 'Pierre Falez',
-    position : Cesium.Cartesian3.fromDegrees(3.136670, 50.609752),
-    description : 'Help !',
-    point : {
-      pixelSize : 5,
-      color : Cesium.Color.RED,
-      outlineColor : Cesium.Color.WHITE,
-      outlineWidth : 2
-    },
-    label : {
-      text : 'Pierre Falez',
-      font : '14pt monospace',
-      style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-      outlineWidth : 2,
-      verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
-      pixelOffset : new Cesium.Cartesian2(0, -9),
-      show: false
-    }
-  }));
+  <body>
 
-  helps.push(viewer.entities.add({
-    name : 'Philippe Antoine',
-    position : Cesium.Cartesian3.fromDegrees(3.136690, 50.609752),
-    description : 'Help !',
-    point : {
-      pixelSize : 5,
-      color : Cesium.Color.RED,
-      outlineColor : Cesium.Color.WHITE,
-      outlineWidth : 2
-    },
-    label : {
-      text : 'Philippe Antoine',
-      font : '14pt monospace',
-      style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-      outlineWidth : 2,
-      verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
-      pixelOffset : new Cesium.Cartesian2(0, -9),
-      show: false
-    }
-  }));
+    <div id="searchBar">
+      <table><tr>
+        <td>Search for people</td>
+        <td>
+          <input id="searchBarInput" type="text" size="10">
+        </td>
+      </tr></table>
+    </div>
 
-  helps.push(viewer.entities.add({
-    name : 'Benjamin Danglot',
-    position : Cesium.Cartesian3.fromDegrees(3.136710, 50.609752),
-    description : 'Help !',
-    point : {
-      pixelSize : 5,
-      color : Cesium.Color.RED,
-      outlineColor : Cesium.Color.WHITE,
-      outlineWidth : 2
-    },
-    label : {
-      text : 'Benjamin Danglot',
-      font : '14pt monospace',
-      style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-      outlineWidth : 2,
-      verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
-      pixelOffset : new Cesium.Cartesian2(0, -9),
-      show: false
-    }
-  }));
+    <div id="cesiumContainer" class="fullSize"></div>
 
-  helps.push(viewer.entities.add({
-    name : 'Nicolas Cachera',
-    position : Cesium.Cartesian3.fromDegrees(3.136650, 50.609752),
-    description : 'Help !',
-    point : {
-      pixelSize : 5,
-      color : Cesium.Color.RED,
-      outlineColor : Cesium.Color.WHITE,
-      outlineWidth : 2
-    },
-    label : {
-      text : 'Nicolas Cachera',
-      font : '14pt monospace',
-      style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-      outlineWidth : 2,
-      verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
-      pixelOffset : new Cesium.Cartesian2(0, -9),
-      show: false
-    }
-  }));*/
+    <script src="./gestionDeCrises.js"></script>
 
-  var mousePosition;
-  var handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas);
+  </body>
 
-  handler.setInputAction(function(movement) {
-    var pickedEntity = viewer.scene.pick(movement.endPosition);
-    helps.forEach(function(help) {
-      if(pickedEntity && pickedEntity.id == help) {
-        help.label.show = true;
-      } else {
-        help.label.show = false;
-      }
-    });
-  }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-
-  var search = document.getElementById('searchBarInput');
-
-  helpsName = [];
-  helps.forEach(function(help) {
-    helpsName.push(help.name);
-  });
-
-  $('#searchBarInput').autocomplete({
-    source: helpsName
-  });
-
-  $('#searchBarInput').keyup(function(event) {
-    if(event.keyCode == 13) {
-      helps.some(function(help) {
-        if(help.name.toLowerCase().replace(/\s+/g, '').indexOf(search.value.toLowerCase().replace(/\s+/g, '')) > -1) {
-          viewer.zoomTo(help);
-          search.value = help.name;
-          return true;
-        } 
-      });
-
-    }
-  });
-
-  </script>
-</body>
 </html>
