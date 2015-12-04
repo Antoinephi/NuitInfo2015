@@ -1,5 +1,7 @@
 package com;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import org.sql2o.Connection;
@@ -25,4 +27,30 @@ public class AppModel implements Model {
         }
 	}
 
+
+	@Override
+	public List<Location> getLastLocationByUser() {
+          
+        try (Connection conn = sql2o.open()) {
+            List<Location> locations = conn.createQuery("select location_id, latitude, longitude, max(timestamp_location) as timestamp_location, client_id from location GROUP BY location_id")
+                    .executeAndFetch(Location.class);
+            return locations;
+        }
+	}
+	
+	@Override
+	public boolean checkDanger(double longitude, double latitude) {
+        try (Connection conn = sql2o.beginTransaction()) {
+            int n = conn.createQuery("SELECT COUNT(*) latitude FROM location "+
+            				 "WHERE power((:lo)-longitude, 2)+power((:la)-latitude, 2) <= 0.001"
+            					)
+                    .addParameter("la", latitude)
+                    .addParameter("lo", longitude)
+                    .executeScalar(Integer.class);
+            
+            return n == 0;
+        }
+
+	}
 }
+	

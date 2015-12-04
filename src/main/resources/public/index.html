@@ -8,11 +8,11 @@
   <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
   <title>Hello World!</title>
-  <script src="../Build/Cesium/Cesium.js"></script>
+  <script src="./Build/Cesium/Cesium.js"></script>
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
   <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <style>
-  @import url(../Build/Cesium/Widgets/widgets.css);
+  @import url(./Build/Cesium/Widgets/widgets.css);
   html, body, #cesiumContainer {
     width: 100%; height: 100%; margin: 0; padding: 0;
   }
@@ -42,8 +42,41 @@
   var viewer = new Cesium.Viewer('cesiumContainer');
 
   var helps = [];
+ 
+  $.get("http://172.18.13.123:8080/location", function(data){
+	  console.log($.parseJSON(data));
+	  json_data = $.parseJSON(data);
+	  
+	  $.each(json_data, function(index){
+		  console.log(json_data[index].client_id);
+		  console.log(json_data[index].latitude);
+		  console.log(json_data[index].longitude);
 
-  helps.push(viewer.entities.add({
+		 helps.push(viewer.entities.add({
+			 name : json_data[index].client_id,
+			 position : Cesium.Cartesian3.fromDegrees(parseFloat(json_data[index].longitude), parseFloat(json_data[index].latitude)),
+			 description : 'Help !',
+			    point : {
+			      pixelSize : 5,
+			      color : Cesium.Color.RED,
+			      outlineColor : Cesium.Color.WHITE,
+			      outlineWidth : 2
+			    },
+			    label : {
+			      text : json_data[index].client_id + '',
+			      font : '14pt monospace',
+			      style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+			      outlineWidth : 2,
+			      verticalOrigin : Cesium.VerticalOrigin.BOTTOM,
+			      pixelOffset : new Cesium.Cartesian2(0, -9),
+			      show: false
+			    }
+		 })); 
+	  });
+	  
+  });
+  
+  /*helps.push(viewer.entities.add({
     name : 'Pierre Falez',
     position : Cesium.Cartesian3.fromDegrees(3.136670, 50.609752),
     description : 'Help !',
@@ -125,7 +158,7 @@
       pixelOffset : new Cesium.Cartesian2(0, -9),
       show: false
     }
-  }));
+  }));*/
 
   var mousePosition;
   var handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas);

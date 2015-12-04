@@ -61,6 +61,21 @@ public class Main {
         	return "";
         });
         
+        Spark.get("/location", (request, response) -> {
+        	model.getLastLocationByUser();
+        	return gson.toJson(model.getLastLocationByUser());
+        	//{'locations':[{'client_id':'', 'latitude':'', 'longitude':''}, {'client_id':'', 'latitude':'', 'longitude':''}]};
+    	});
+        
+        Spark.get("/check", (request, response) -> {
+        	System.out.println("CHECK");
+        	double longitude = Double.parseDouble(request.queryParams("longitude"));
+        	double latitude = Double.parseDouble(request.queryParams("latitude"));
+        	;
+        	response.status(200);
+        	return model.checkDanger(longitude, latitude) ? "1" : "0";
+    	});
+        
     }
     
 
